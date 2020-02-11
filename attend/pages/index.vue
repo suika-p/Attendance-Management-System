@@ -1,22 +1,20 @@
 <template>
 <div id="app">
+
 <nav class="navbar is-light" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item">
       <img src="~/assets/icon.png" width="40" height="80">
     </a>
-
   </div>
   <div class="navbar-menu">
     <div class="navbar-start">
       <a class="navbar-item" href="/index">
         Attend
       </a>
-
       <a class="navbar-item" href="/profile">
         Member
       </a>
-
     </div>
   </div>
 </nav>
@@ -25,14 +23,14 @@
 
   <div class="hero-body">
     <div class="container has-text-centered">
-      <h1 class="title">Member Status</h1>
-      <h2 class="subtitle">info</h2>
+      <h1 class="title">Atendence Status</h1>
+      <h2 class="subtitle">Member infomation</h2>
     </div>
   </div>
 
   <div class="hero-foot">
     <nav class="tabs">
-      <div class="container">
+      <div class="container list_button">
         <ul>
           <li>
             <button v-on:click="inputOk" class="button is-primary">Add Name</button>
@@ -50,14 +48,13 @@
             v-model="nameDel" type="textbox" 
             class="input is-primary" placeholder="write del-name">
           </li>
-          
         </ul>
       </div>
     </nav>
   </div>
 </div>
 
-<div class="dropdown is-hoverable is-up">
+<div class="dropdown is-hoverable is-up sort-button">
   <div class="dropdown-trigger">
     <button class="button is-primary is-light" aria-haspopup="true" aria-controls="dropdown-menu3">
       <span>Sort</span>
@@ -81,44 +78,66 @@
   </div>
 </div>
 
-<div id="all_area">
-  <table id="solid_area" class="table is-striped">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Days Attended</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(name, key) in names" :key="key">
-        <td>{{name.text}}</td>
-        <td>{{name.num}}</td>
-      </tr>
-    </tbody>
-  </table>
-  <div id="scroll_area">
-    <table class="table is-striped">
+<div class="box">
+  <div id="all_area" class="box_item">
+    <table id="solid_area" class="table is-striped is-bordered">
       <thead>
         <tr>
-          <th v-for="(i, keys) in calender.flat()" :key="keys">
-              {{dayOnMonth[keys]}}/{{i}}
-          </th>
+          <th>Name</th>
+          <th>Days Attended</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(_, key) in names.length" :key="key">
-          <td v-for="(day, keys) in names[key].tdColors" :key="keys" 
-          v-on:click="changeColor(key, keys)" 
-          v-bind:style="{background:names[key].tdColors[keys]}">
-          {{names[key].changeColors[keys]}}
-          </td>
+        <tr v-for="(name, key) in names" :key="key">
+          <td>{{name.text}}</td>
+          <td>{{name.num}}</td>
         </tr>
       </tbody>
     </table>
+    <div id="scroll_area">
+      <table class="table is-striped is-bordered">
+        <thead>
+          <tr>
+            <th v-for="(i, keys) in calender.flat()" :key="keys">
+                {{dayOnMonth[keys]}}/{{i}}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(_, key) in names.length" :key="key">
+            <td v-for="(day, keys) in names[key].tdColors" :key="keys" 
+            v-on:click="changeColor(key, keys)" 
+            v-bind:style="{background:names[key].tdColors[keys]}">
+            {{names[key].changeColors[keys]}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
+
+  <div class="box_col box_item">
+    <div class="box">
+      <div class="box_item">
+        <div class="control">
+          <textarea v-model="message" class="textarea is-focused" placeholder="Memo"></textarea>
+        </div>
+      </div>
+      <div class="box_item">
+        <button v-on:click="submitText" class="button is-primary is-focused">Submit</button>
+      </div>
+    </div>
+
+    <div v-for="(item, key) in submitTexts" :key="key" class="box_item notification is-primary is-light text-container">
+      <p class="str-bend">{{item}}
+      </p>
+    </div>
+
+  </div>
+
 </div>
 
+</div>
 </template>
 
 <script>
@@ -126,7 +145,7 @@ export default {
   name: 'app',
   beforeRouteEnter(to, from, next) {
     next(vm => {
-      vm.initialize(); // 初期化処理
+      vm.initialize();
       next();
     });
   },
@@ -146,12 +165,20 @@ export default {
         { text: 'amatsukaze', num: 0, changeColors: [], tdColors:[]},
         { text: 'inazuma', num: 0, changeColors: [], tdColors:[]},
         { text: 'ikazuti', num: 0, changeColors: [], tdColors:[]},
+        { text: 'shimakaze', num: 0, changeColors: [], tdColors:[]},
+        { text: 'umikaze', num: 0, changeColors: [], tdColors:[]},
+        { text: 'tokitsukaze', num: 0, changeColors: [], tdColors:[]},
+        { text: 'amatsukaze', num: 0, changeColors: [], tdColors:[]},
+        { text: 'inazuma', num: 0, changeColors: [], tdColors:[]},
+        { text: 'ikazuti', num: 0, changeColors: [], tdColors:[]},
       ],
       isOK: false,
       nameInput: "",
       isdelOK: false,
       nameDel: "",
       dayOnMonth: [],
+      message: "",
+      submitTexts: ["tokitsukaze is homecoming.", "shimakaze is sick.", "tokitsukaze is homecoming.", "shimakaze is sick."],
     }
   },
 
@@ -233,6 +260,11 @@ export default {
         return 0;
       });
     },
+    submitText: function() {
+      this.submitTexts.push(this.message);
+      this.message = "";
+    },
+
     initialize: function () {
 
       var endDay = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -262,21 +294,21 @@ export default {
 <style>
 
 #all_area {
-  width: 100%;
+  width: 70%;
   position: relative;
 }
 
 #solid_area {
-  width: 20%;
+  width: 30%;
   position: absolute;
   left: 0px;
   top: 0px;
 }
 
 #scroll_area {
-  width: 50%;
+  width: 70%;
   position: absolute;
-  left: 20%;
+  left: 30%;
   top: 0;
   overflow-x: scroll;
 }
@@ -284,9 +316,35 @@ export default {
 #scroll_area table {
    /*width: 800px;*/
 }
-
+.list_button {
+  margin-left: 12%;
+}
+.sort-button {
+  margin-left: 5%;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
 .box {
   display: flex;
+  flex-direction: row;
+  padding-top: 2px;
+  background-color: aquamarine;
+}
+.box_col {
+  display: flex;
+  flex-direction: column;
+}
+.box_item {
+  margin-left: 3%;
+}
+.text-container {
+  width: 300px;
+}
+.str-bend {
+  word-wrap: break-word;
+}
+.back-color {
+  background-color: dodgerblue;
 }
 
 </style>
