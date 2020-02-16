@@ -1,6 +1,6 @@
 <template>
 <div id="app">
-
+<!-- navbarの設置 -->
 <nav class="navbar is-light head" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item">
@@ -9,7 +9,7 @@
   </div>
   <div class="navbar-menu">
     <div class="navbar-start">
-      <a class="navbar-item" href="/index">
+      <a class="navbar-item" href="/">
         Attend
       </a>
       <a class="navbar-item" href="/profile">
@@ -19,9 +19,10 @@
   </div>
 </nav>
 
+<!-- navbarの位置を調整(paddingっぽく)する -->
 <div class="navbar" style="z-index:-1"></div>
 
-
+<!-- タイトル -->
 <div class="hero is-primary is-bold hero-set">
 
   <div class="hero-body">
@@ -35,6 +36,7 @@
     <nav class="tabs">
       <div class="container list_button">
         <ul>
+          <!-- addボタンとdelボタンの設置 -->
           <li>
             <button v-on:click="inputOk" class="button is-primary">Add Name</button>
           </li>
@@ -57,6 +59,7 @@
   </div>
 </div>
 
+<!-- ソートの配置 -->
 <div class="dropdown is-hoverable is-up sort-button">
   <div class="dropdown-trigger">
     <button class="button is-primary is-light" aria-haspopup="true" aria-controls="dropdown-menu3">
@@ -68,12 +71,15 @@
   </div>
   <div class="dropdown-menu" role="menu">
     <div class="dropdown-content">
+      <!-- 降順にソート -->
       <a href="#" class="dropdown-item" v-on:click="sortDescending">
         descending(days)
       </a>
+      <!-- 昇順にソート -->
       <a href="#" class="dropdown-item" v-on:click="sortAscending">
         ascending(days)
       </a>
+      <!-- 名前順にソート -->
       <a href="#" class="dropdown-item" v-on:click="sortName">
         lexical
       </a>
@@ -90,6 +96,7 @@
           <th>Days Attended</th>
         </tr>
       </thead>
+      <!-- 名前と出席日数の表示 -->
       <tbody>
         <tr v-for="(name, key) in names" :key="key">
           <td>{{name.text}}</td>
@@ -97,6 +104,7 @@
         </tr>
       </tbody>
     </table>
+    <!-- カレンダー（スクロール可能）の配置 -->
     <div id="scroll_area">
       <table class="table is-striped is-bordered">
         <thead>
@@ -106,7 +114,7 @@
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="status-field">
           <tr v-for="(_, key) in names.length" :key="key">
             <td v-for="(day, keys) in names[key].tdColors" :key="keys" 
             v-on:click="changeColor(key, keys)" 
@@ -119,6 +127,7 @@
     </div>
   </div>
 
+<!-- メモ欄の配置 -->
   <div class="box_col box_item">
     <div class="box">
       <div class="box_item">
@@ -186,6 +195,7 @@ export default {
   },
 
   computed: {
+    // カレンダーの生成
     calender: function() {
       var cal = new Array(12);
       var endDay = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -205,17 +215,21 @@ export default {
   },
 
   methods: {
+    // addボタンやdelボタンを押した時の制御
     inputOk: function() {
       this.isOK = true;
     },
+    // addボタンやdelボタンを押した時の制御
     finOk: function() {
       this.names.push({text: this.nameInput, num: 0, changeColors: Array(this.daysOfYear).fill("ng"), tdColors: Array(this.daysOfYear).fill("red")});
       this.isOK = false;
       this.nameInput = "";
     },
+    // addボタンやdelボタンを押した時の制御
     delOk: function() {
       this.isdelOK = true;
     },
+    // addボタンやdelボタンを押した時の制御
     delFinOk: function() {
       for (var i = 0; i < this.names.length; i++) {
         if (this.names[i].text == this.nameDel) {
@@ -227,6 +241,7 @@ export default {
       this.isdelOK = false;
       this.nameDel = "";
     },
+    // 出席表や出席日数のカウント
     changeColor: function(x, y) {
       if (this.names[x].changeColors[y] == "ng") {
         this.names[x].changeColors[y] = "ok";
@@ -242,6 +257,7 @@ export default {
         this.isOK = !this.isOK;
       }
     },
+    // 降順ソート
     sortDescending: function() {
       this.names.sort(function(a, b){
         if (a.num > b.num) return -1;
@@ -249,6 +265,7 @@ export default {
         return 0;
       });
     },
+    // 昇順ソート
     sortAscending: function() {
       this.names.sort(function(a, b){
         if (a.num < b.num) return -1;
@@ -256,6 +273,7 @@ export default {
         return 0;
       });
     },
+    // 名前順にソート
     sortName: function() {
       this.names.sort(function(a, b){
         if (a.text < b.text) return -1;
@@ -263,13 +281,14 @@ export default {
         return 0;
       });
     },
+    // メモ欄の提出ボタン
     submitText: function() {
       this.submitTexts.push(this.message);
       this.message = "";
     },
 
     initialize: function () {
-
+      // カレンダーの初期化
       var endDay = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
       var now = new Date();
       var y = now.getFullYear();
@@ -283,6 +302,7 @@ export default {
           ans.push(i+1);
         }
       }
+      // 出席してるかどうかの表をng、okの配列で生成
       this.dayOnMonth = ans;
       for (var i = 0; i < this.names.length; i++) {
         this.names[i].changeColors = Array(this.daysOfYear).fill("ng");
@@ -364,6 +384,10 @@ export default {
 
 .back-color {
   background-color: dodgerblue;
+}
+
+#status-field {
+  cursor : pointer;
 }
 
 </style>
