@@ -1,7 +1,7 @@
 <template>
 <div id="app">
 
-<nav class="navbar is-light" role="navigation" aria-label="main navigation">
+<nav class="navbar is-light head" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item">
       <img src="~/assets/icon.png" width="40" height="80">
@@ -19,7 +19,10 @@
   </div>
 </nav>
 
-<div class="hero is-primary is-bold">
+<div class="navbar" style="z-index:-1"></div>
+
+
+<div class="hero is-primary is-bold hero-set">
 
   <div class="hero-body">
     <div class="container has-text-centered">
@@ -293,6 +296,15 @@ export default {
 
 <style>
 
+.head {
+  position: fixed;
+  width: 100%;
+}
+
+/* .hero-set {
+
+} */
+
 #all_area {
   width: 70%;
   position: relative;
@@ -306,43 +318,50 @@ export default {
 }
 
 #scroll_area {
-  width: 70%;
-  position: absolute;
-  left: 30%;
+  /*left: 30%;*/
+  margin-left: 30%;
   top: 0;
   overflow-x: scroll;
 }
 
-#scroll_area table {
-   /*width: 800px;*/
-}
+/* #scroll_area table {
+   width: 800px;
+} */
+
 .list_button {
   margin-left: 12%;
 }
+
 .sort-button {
   margin-left: 5%;
   margin-top: 2px;
   margin-bottom: 2px;
 }
+
 .box {
   display: flex;
   flex-direction: row;
   padding-top: 2px;
   background-color: aquamarine;
 }
+
 .box_col {
   display: flex;
   flex-direction: column;
 }
+
 .box_item {
   margin-left: 3%;
 }
+
 .text-container {
   width: 300px;
 }
+
 .str-bend {
   word-wrap: break-word;
 }
+
 .back-color {
   background-color: dodgerblue;
 }
